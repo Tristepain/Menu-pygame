@@ -1,0 +1,33 @@
+import pygame
+import random
+
+pygame.init()
+class carre:
+    def __init__(self, cote = 50,color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))):
+        self.cote = cote
+        self.color = color
+
+    def draw(self):
+        pygame.draw.rect(screen,self.color,(0,0,self.cote,self.cote))
+
+a = carre()
+
+
+print(a.color)#(252, 176, 34)
+
+screen = pygame.display.set_mode((500,500))
+
+run = True
+
+while run:
+    screen.fill((0,0,0))
+    a.draw()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            
+            
+    
+    pygame.display.update()
+pygame.quit()
