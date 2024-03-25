@@ -1,0 +1,156 @@
+import pygame
+from random import*
+from time import*
+#from termcolor import colored, cprint
+add = 0
+i = gmtime()
+
+time = 0
+police_size = 40
+seed(i.tm_sec+i.tm_min)
+pos = (0,0)
+W = (255,255,255)
+BLACK = (0,0,0)
+PINK = ( 249 , 66 , 158)
+GREEN = (0,160,0)
+BLUE = (0,0,255)
+ORANGE = (255,90,19)
+YELLOW = (255,255,0)
+color1 = PINK
+color2 = "cyan"
+color3 = BLUE
+size = 55
+pos_x = 20
+pos_y = 20
+ajout = 20
+ajout2 = 20
+ajout3 = 20
+ajout4 = 20
+compte = 0
+taille_ecran = (1000,500)
+pos_x2 = randint(size,taille_ecran[0]-size)
+pos_y2 = randint(size,taille_ecran[1]-size)
+
+pygame.init()
+
+police = pygame.font.Font(None,police_size)
+police2 = pygame.font.Font(None,police_size)
+ecran = pygame.display.set_mode(taille_ecran)
+pygame.display.set_caption("Test")
+#player_pos = pygame.Vector2(ecran.get_width() / 2, ecran.get_height() / 2)
+
+player_pos = (ecran.get_width() / 2, ecran.get_height() / 2)
+
+done = False
+clock = pygame.time.Clock()
+
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+    
+    if add == 0:
+        player_pos = (pos_x,pos_y)
+        pos_x += ajout
+        pos_y += ajout2
+    
+        player_pos2 = (pos_x2, pos_y2)
+        pos_x2 += ajout3
+        pos_y2 += ajout4
+        ecran.fill(color1)
+    
+    
+        rect1 = pygame.draw.circle(ecran, color2, player_pos, size)
+    
+        rect2 = pygame.draw.circle(ecran, color3, player_pos2, size)
+    
+    surface_txt = police.render("Jean Du Jardin",True,BLACK,W)
+    position_txt = (780,465)
+    surface_affich = ecran.blit(surface_txt, position_txt)
+    
+    shock = pygame.Rect.colliderect(rect1, rect2)
+    
+    if pos_x >= taille_ecran[0]-size//2 or pos_x <= size//2 :
+        ajout = -ajout
+        compte += 1
+        
+        if compte == 1:
+            color1 = GREEN
+            color2= PINK
+            
+        elif compte == 2:
+            color1 = ORANGE
+            color2 = "cyan"
+            
+        elif compte == 3:
+            color1 = BLACK
+            color2 = YELLOW
+        
+        elif compte <= 4 :
+            color1 = YELLOW
+            color2 = BLUE
+            compte = 0
+    
+    elif pos_y >= taille_ecran[1]-size//2 or pos_y <= size//2:
+        ajout2 = -ajout2
+        compte += 1
+        
+        if compte == 1:
+            color1 = GREEN
+            color2= PINK
+            
+        elif compte == 2:
+            color1 = ORANGE
+            color2 = "cyan"
+            
+        elif compte == 3:
+            color1 = BLACK
+            color2 = YELLOW
+        
+        elif compte <= 4 :
+            color1 = YELLOW
+            color2 = BLUE
+            compte = 0
+    
+    if pos_x2 >= taille_ecran[0]-size//2 or pos_x2 <= size//2 :
+        ajout3 = -ajout3
+    
+    elif pos_y2 >= taille_ecran[1]-size//2 or pos_y2 <= size//2:
+        ajout4 = -ajout4
+            
+    if shock :
+        ecran.fill(color1)
+        
+        surface_txt = police.render("Jean Du Jardin",True,BLACK,W)
+        position_txt = (780,465)
+        surface_affich = ecran.blit(surface_txt, position_txt)
+        
+        surface_txt2 = police2.render("Boom",True,ORANGE)
+        position_txt = (pos_x,pos_y)
+        surface_affich = ecran.blit(surface_txt2, position_txt)   
+        
+        # /t, /n
+        
+        image_surface = pygame.image.load("image//boom.png")
+        image_scaled_surface = pygame.transform.scale(image_surface, taille_ecran)
+        ecran.blit(image_scaled_surface, pos)
+        add += 1
+    
+    time += add
+    
+    if time >= 500 :
+        done = True 
+    
+    #kernol : gestion de tâches 
+    #os pas forcément coopératif    
+            
+    print("Balle 1", pos_x, pos_y, "Balle 2", pos_x2, pos_y2, shock,"i",i)
+    #print((f'{colored.fg(1)} Mon texte en rouge'),pos_x2,pos_y2)
+    """if pos_x >= 770 and pos_y <= 30 or pos_x >= 770 and pos_y >= 570 or pos_x <= 30 and pos_y <= 30 or pos_x <= 30 and pos_y >= 570:
+        ajout = ajout*2
+        ajout2 = ajout2*2
+   """
+    pygame.display.flip()
+    
+    clock.tick(15)
+pygame.quit()
